@@ -1,0 +1,29 @@
+# This file starts a bash shell on systemd startup
+# Works like sulogin(8) (or console-shell.service), but does
+# not require root password. Useful in container environments.
+
+[Unit]
+Description=Bash Shell
+Documentation=man:bash(1)
+After=systemd-user-sessions.service plymouth-quit-wait.service
+After=rc-local.service
+Before=getty.target
+
+[Service]
+Environment=HOME=/root
+WorkingDirectory=/root
+ExecStart=-/bin/bash
+ExecStopPost=-/bin/systemctl poweroff --no-block
+Type=idle
+StandardInput=tty-force
+StandardOutput=inherit
+StandardError=inherit
+KillMode=process
+IgnoreSIGPIPE=no
+
+# Bash ignores SIGTERM, so we send SIGHUP instead, to ensure that bash
+# terminates cleanly.
+KillSignal=SIGHUP
+
+[Install]
+WantedBy=multi-user.target
