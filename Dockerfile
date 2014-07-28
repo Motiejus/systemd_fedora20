@@ -18,8 +18,9 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
-ADD bash-shell.service /etc/systemd/system/
-RUN systemctl enable bash-shell.service
+ADD myinit.service /etc/systemd/system/
+ADD myinit /bin/
+RUN systemctl enable myinit.service
 
 VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/init"]

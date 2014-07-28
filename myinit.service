@@ -1,9 +1,11 @@
 # This file starts a bash shell on systemd startup
+# Or, if $MYINIT is set, execs the command.
+#
 # Works like sulogin(8) (or console-shell.service), but does
 # not require root password. Useful in container environments.
 
 [Unit]
-Description=Bash Shell
+Description=My Init
 Documentation=man:bash(1)
 After=systemd-user-sessions.service plymouth-quit-wait.service
 After=rc-local.service
@@ -12,7 +14,7 @@ Before=getty.target
 [Service]
 Environment=HOME=/root
 WorkingDirectory=/root
-ExecStart=-/bin/bash
+ExecStart=-/bin/myinit
 ExecStopPost=-/bin/systemctl poweroff --no-block
 Type=idle
 StandardInput=tty-force
